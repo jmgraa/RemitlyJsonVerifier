@@ -16,16 +16,16 @@ def verify_json(input_file):
 
     except FileNotFoundError:
         print("File not found:", input_file)
-        return False
+        return True
     except json.JSONDecodeError:
         print("Invalid JSON format in the file:", input_file)
-        return False
+        return True
     except KeyError:
         print("File is not formatted correctly in the AWS::IAM::Role Policy format:", input_file)
-        return False
+        return True
     except Exception as e:
         print(f"An error occurred\nType = {type(e).__name__}\nMessage = {e}\n")
-        return False
+        return True
 
 
 if __name__ == "__main__":

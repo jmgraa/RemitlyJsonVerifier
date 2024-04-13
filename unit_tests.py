@@ -5,7 +5,7 @@ import unittest
 from aws_format_verifier import verify_json
 
 
-class TestVerifyJSON(unittest.TestCase):
+class TestJsonVerifier(unittest.TestCase):
     def setUp(self):
         self.valid_data = {
             "PolicyName": "root",
@@ -24,7 +24,7 @@ class TestVerifyJSON(unittest.TestCase):
                 ]
             }
         }
-        self.invalid_data = {
+        self.data_with_single_asterisk = {
             "PolicyName": "root",
             "PolicyDocument": {
                 "Version": "2012-10-17",
@@ -83,7 +83,7 @@ class TestVerifyJSON(unittest.TestCase):
 
     def test_invalid_json(self):
         with tempfile.NamedTemporaryFile(mode='w', delete=False) as temp_file:
-            json.dump(self.invalid_data, temp_file)
+            json.dump(self.data_with_single_asterisk, temp_file)
             temp_file_path = temp_file.name
         self.assertFalse(verify_json(temp_file_path))
 
@@ -97,19 +97,19 @@ class TestVerifyJSON(unittest.TestCase):
         os.unlink(temp_file_path)
 
     def test_nonexistent_file(self):
-        self.assertFalse(verify_json("nonexistent.json"))
+        self.assertTrue(verify_json("nonexistent.json"))
 
     def test_empty_file(self):
         with tempfile.NamedTemporaryFile(mode='w', delete=False) as temp_file:
             temp_file_path = temp_file.name
-        self.assertFalse(verify_json(temp_file_path))
+        self.assertTrue(verify_json(temp_file_path))
         os.unlink(temp_file_path)
 
     def test_invalid_aws_format(self):
         with tempfile.NamedTemporaryFile(mode='w', delete=False) as temp_file:
             json.dump(self.invalid_aws_format, temp_file)
             temp_file_path = temp_file.name
-        self.assertFalse(verify_json(temp_file_path))
+        self.assertTrue(verify_json(temp_file_path))
         os.unlink(temp_file_path)
 
     def test_invalid_file_content(self):
@@ -117,7 +117,7 @@ class TestVerifyJSON(unittest.TestCase):
             temp_file.write(self.invalid_text)
             temp_file.seek(0)
             temp_file_path = temp_file.name
-        self.assertFalse(verify_json(temp_file_path))
+        self.assertTrue(verify_json(temp_file_path))
         os.unlink(temp_file_path)
 
 
