@@ -67,7 +67,3 @@ following command:
 
     python3 unit_test.py <path_to_json_file>
 
-
-### Additional Information
-
-The script was created as part of the Remitly 2024 recruitment task.
