@@ -1,1 +1,15 @@
+# Python bytecode (compiled python files)
+*.pyc
+
+# Directory for virtual environments
+venv/
+env/
+
+# IDE settings and files
 .idea/
+*.iml
+*.iws
+*.ipr
+
+# User-specific files
+*.DS_Store
